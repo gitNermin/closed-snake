@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <GridSize>k__BackingField: {x: 3, y: 3}
   <Sprites>k__BackingField: {fileID: 11400000, guid: 73cdc60e701a21343b3d82fc0546a7a8, type: 2}
-  <BackfaceSprite>k__BackingField: {fileID: 21300000, guid: c4a427037512f0d41bea8e7a14800c7d, type: 3}
+  <BackfaceSprite>k__BackingField: {fileID: 21300000, guid: 23bedb961464d2b4092de591a9e6f7b2, type: 3}
   _emptyCellsCount: 0

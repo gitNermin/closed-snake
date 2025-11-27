@@ -10,14 +10,16 @@ namespace Game
 {
     public class GridCellUI : MonoBehaviour, IPointerClickHandler
     {
-        [SerializeField] private Image _image;
-        [SerializeField] private Color _normalColor;
-        [SerializeField] private Color _matchedColor;
+        private static readonly int FrontFace = Animator.StringToHash("FrontFace");
+        private static readonly int BackFace = Animator.StringToHash("BackFace");
+        private static readonly int Matched = Animator.StringToHash("Matched");
+        
+        [SerializeField] private Graphic _targetGraphic;
+        [SerializeField] private Image _frontFaceImage;
+        [SerializeField] private Image _backFaceImage;
+        [SerializeField] private Animator _anim;
 
         private Guid _id;
-        private bool _isFront;
-        private Sprite _backSprite;
-        private Sprite _frontSprite;
         private UnityAction<GridCellUI> _onClick;
 
         private CancellationTokenSource _tokenSource;
@@ -26,14 +28,14 @@ namespace Game
 
         public Guid Id => _id;
 
+        private CellState _state;
+
         public void Setup(Guid id, Sprite frontSprite, Sprite backSprite, UnityAction<GridCellUI> onClick)
         {
             _id = id;
             _onClick = onClick;
-            _backSprite = backSprite;
-            _frontSprite = frontSprite;
-            
-            ShowBackFace();
+            _frontFaceImage.sprite = frontSprite;
+            _backFaceImage.sprite = backSprite;
         }
 
         public async void SetStateAsync(CellState state, float delay, Action onFinish = null)
@@ -62,35 +64,35 @@ namespace Game
             switch (state)
             {
                 case CellState.FrontFace:
+                    _targetGraphic.raycastTarget = true;
                     ShowFrontFace();
-                    _image.color = _normalColor;
-                    _image.raycastTarget = true;
                     break;
                 case CellState.BackFace:
+                    _targetGraphic.raycastTarget = true;
                     ShowBackFace();
-                    _image.color = _normalColor;
-                    _image.raycastTarget = true;
                     break;
                 case CellState.Matched:
-                    ShowFrontFace();
-                    _image.color = _matchedColor;
-                    _image.raycastTarget = false;
+                    _targetGraphic.raycastTarget = false;
+                    ShowMatched();
                     break;
             }
+
+            _state = state;
         }
         
         private void ShowFrontFace()
         {
-            if(_isFront) return;
-            _image.sprite = _frontSprite;
-            _isFront = true;
+            _anim.SetTrigger(FrontFace);
         }
 
         private void ShowBackFace()
         {
-            if(!_isFront) return;
-            _image.sprite = _backSprite;
-            _isFront = false;
+            _anim.SetTrigger(BackFace);
+        }
+
+        private void ShowMatched()
+        {
+            _anim.SetTrigger(Matched);
         }
 
         public void OnPointerClick(PointerEventData eventData)
