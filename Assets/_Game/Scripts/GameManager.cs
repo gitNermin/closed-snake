@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -87,6 +85,9 @@ namespace Game
         
         private void OnCellClicked(GridCellUI cell)
         {
+            if(cell == _lastRevealedCell)
+                return;
+            
             if (!_lastRevealedCell)
             {
                 RevealCell(cell);
