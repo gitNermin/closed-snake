@@ -330,9 +330,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b8b41b30e10064ab845013fdb71910, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levels: []
+  _levels:
+  - {fileID: 11400000, guid: e718231659d2e934b931c7c77e496ee1, type: 2}
   _levelGridUI: {fileID: 1208575617}
   _gridCellPrefab: {fileID: 4596286435286837425, guid: ae07eb4d76863de41b00b02c15d06a57, type: 3}
+  _cellFlipTime: 2
 --- !u!4 &994393301
 Transform:
   m_ObjectHideFlags: 0
@@ -451,11 +453,11 @@ RectTransform:
   m_Father: {fileID: 40972721}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 240, y: 0}
-  m_SizeDelta: {x: -520, y: -40}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -40, y: 0}
+  m_SizeDelta: {x: 1200, y: 1000}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1208575614
 MonoBehaviour:
   m_ObjectHideFlags: 0

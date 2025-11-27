@@ -9,12 +9,15 @@ namespace Game
     public class GridCellUI : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Image _image;
+        [SerializeField] private Color _normalColor;
+        [SerializeField] private Color _matchedColor;
 
         private Guid _id;
         private bool _isFront;
         private Sprite _backSprite;
         private Sprite _frontSprite;
         private UnityAction<GridCellUI> _onClick;
+        
 
         public Guid Id => _id;
 
@@ -48,17 +51,17 @@ namespace Game
             {
                 case CellState.FrontFace:
                     ShowFrontFace();
-                    _image.color = Color.white;
+                    _image.color = _normalColor;
                     _image.raycastTarget = false;
                     break;
                 case CellState.BackFace:
                     ShowBackFace();
-                    _image.color = Color.white;
+                    _image.color = _normalColor;
                     _image.raycastTarget = true;
                     break;
-                case CellState.Collected:
+                case CellState.Matched:
                     ShowFrontFace();
-                    _image.color = new Color(200, 200, 200, 200);
+                    _image.color = _matchedColor;
                     _image.raycastTarget = false;
                     break;
             }
@@ -75,5 +78,5 @@ public enum CellState
 {
     BackFace,
     FrontFace,
-    Collected
+    Matched
 }
