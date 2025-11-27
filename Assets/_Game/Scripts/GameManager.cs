@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Game
         [SerializeField] private LevelData[] _levels;
         [SerializeField] private LevelGridUI _levelGridUI;
         [SerializeField] private GridCellUI _gridCellPrefab;
+        [SerializeField] private Transform _emptyCellPrefab;
 
         [Header("Level Settings")] [SerializeField]
         private float _cellFlipTime;
@@ -34,23 +36,21 @@ namespace Game
             if (!_levels[levelIndex].ValidateLevelData())
                 return;
 
-            CancelFlip();
-            
-            _isEnableInput = true;
-            _levelGridUI.Setup(_levels[levelIndex].GridSize);
+            Clear();
 
-            //todo: use pooling
-            _levelGridUI.transform.RemoveAllChildren();
-            int cellsCount = _levels[levelIndex].GridSize.x * _levels[levelIndex].GridSize.y;
-            _pairsCount = cellsCount / 2;
-            _revealedCell = null;
-            var sprites = _levels[levelIndex].Sprites.GetRandomItems(_pairsCount);
+            _levelGridUI.Setup(_levels[levelIndex].GridSize);
+            
+            _pairsCount = _levels[levelIndex].PairsCount;
+            
+            List<Sprite> sprites = _levels[levelIndex].Sprites.GetRandomItems(_pairsCount);
             for (int i = 0; i < _pairsCount; i++)
             {
                 Guid id = Guid.NewGuid();
                 CreateCell(id, sprites[i], _levels[levelIndex].BackfaceSprite);
                 CreateCell(id, sprites[i], _levels[levelIndex].BackfaceSprite);
             }
+            
+            CreateEmptyCells(levelIndex);
 
             _levelGridUI.transform.ShuffleChildren();
         }
@@ -62,6 +62,15 @@ namespace Game
         }
 
 
+        private void CreateEmptyCells(int levelIndex)
+        {
+            var emptyCellsCount = _levels[levelIndex].EmptyCellsCount;
+            for (int i = 0; i < emptyCellsCount; i++)
+            {
+                Instantiate(_emptyCellPrefab, _levelGridUI.transform);
+            }
+        }
+        
         private void OnCellClicked(GridCellUI cell)
         {
             if (!_isEnableInput)
@@ -155,6 +164,14 @@ namespace Game
                 //flip is cancelled
             }
             
+        }
+        
+        private void Clear()
+        {
+            CancelFlip();
+            _isEnableInput = true;
+            _levelGridUI.transform.RemoveAllChildren();
+            _revealedCell = null;
         }
 
         private void CancelFlip()

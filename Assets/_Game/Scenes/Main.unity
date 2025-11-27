@@ -334,7 +334,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e718231659d2e934b931c7c77e496ee1, type: 2}
   _levelGridUI: {fileID: 1208575617}
   _gridCellPrefab: {fileID: 4596286435286837425, guid: ae07eb4d76863de41b00b02c15d06a57, type: 3}
+  _emptyCellPrefab: {fileID: 1364588771242951170, guid: 60164269437c7af4f89e8f1fda443047, type: 3}
   _cellFlipTime: 2
+  _revealedCell: {fileID: 0}
 --- !u!4 &994393301
 Transform:
   m_ObjectHideFlags: 0
