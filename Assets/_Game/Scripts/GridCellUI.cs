@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -17,6 +19,9 @@ namespace Game
         private Sprite _backSprite;
         private Sprite _frontSprite;
         private UnityAction<GridCellUI> _onClick;
+
+        private CancellationTokenSource _tokenSource;
+        private CancellationToken _cancellationToken;
         
 
         public Guid Id => _id;
@@ -31,6 +36,49 @@ namespace Game
             ShowBackFace();
         }
 
+        public async void SetStateAsync(CellState state, float delay, Action onFinish = null)
+        {
+            CancelSetState();
+            
+            _tokenSource = new CancellationTokenSource();
+            _cancellationToken = _tokenSource.Token;
+            
+            try
+            {
+                await Task.Delay((int)(delay * 1000), _cancellationToken);
+                SetState(state);
+                onFinish?.Invoke();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        public void SetState(CellState state)
+        {
+            CancelSetState();
+            
+            switch (state)
+            {
+                case CellState.FrontFace:
+                    ShowFrontFace();
+                    _image.color = _normalColor;
+                    _image.raycastTarget = true;
+                    break;
+                case CellState.BackFace:
+                    ShowBackFace();
+                    _image.color = _normalColor;
+                    _image.raycastTarget = true;
+                    break;
+                case CellState.Matched:
+                    ShowFrontFace();
+                    _image.color = _matchedColor;
+                    _image.raycastTarget = false;
+                    break;
+            }
+        }
+        
         private void ShowFrontFace()
         {
             if(_isFront) return;
@@ -45,31 +93,18 @@ namespace Game
             _isFront = false;
         }
 
-        public void SetState(CellState state)
-        {
-            switch (state)
-            {
-                case CellState.FrontFace:
-                    ShowFrontFace();
-                    _image.color = _normalColor;
-                    _image.raycastTarget = false;
-                    break;
-                case CellState.BackFace:
-                    ShowBackFace();
-                    _image.color = _normalColor;
-                    _image.raycastTarget = true;
-                    break;
-                case CellState.Matched:
-                    ShowFrontFace();
-                    _image.color = _matchedColor;
-                    _image.raycastTarget = false;
-                    break;
-            }
-        }
-
         public void OnPointerClick(PointerEventData eventData)
         {
             _onClick?.Invoke(this);
+        }
+
+
+        private void CancelSetState()
+        {
+            if(_tokenSource == null) return;
+            
+            _tokenSource.Cancel();
+            _tokenSource = null;
         }
     }
 }

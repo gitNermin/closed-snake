@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Game
 {
@@ -13,22 +14,35 @@ namespace Game
         [SerializeField] private GridCellUI _gridCellPrefab;
         [SerializeField] private Transform _emptyCellPrefab;
 
-        [Header("Level Settings")] [SerializeField]
-        private float _cellFlipTime;
+        [SerializeField] private UnityEvent _onLevelStart;
+        [SerializeField] private UnityEvent _onLevelWin;
+        [SerializeField] private UnityEvent _onLevelLose;
+        
 
-        [SerializeField] private GridCellUI _revealedCell;
+        [Header("Level Settings")]
+        [SerializeField] private float _cellFlipTime;
+
+        [SerializeField] private GridCellUI _lastRevealedCell;
         private int _matchedPairs;
         private int _pairsCount;
-
-        CancellationToken _flipCellCancellationToken;
-        private CancellationTokenSource _cts;
-
-        //todo: fire event
-        private bool _isEnableInput;
+        
+        int CurrentLevelIndex
+        {
+            get => PlayerPrefs.GetInt("CurrentLevelIndex", 0);
+            set
+            {
+                if (value >= _levels.Length)
+                {
+                    PlayerPrefs.SetInt("CurrentLevelIndex", 0);
+                }
+                
+                PlayerPrefs.SetInt("CurrentLevelIndex", value);
+            }
+        }
 
         void Start()
         {
-            LoadLevel(0);
+            LoadLevel(CurrentLevelIndex);
         }
 
         private void LoadLevel(int levelIndex)
@@ -73,22 +87,17 @@ namespace Game
         
         private void OnCellClicked(GridCellUI cell)
         {
-            if (!_isEnableInput)
-                return;
-            
-            CancelFlip();
-
-            if (!_revealedCell)
+            if (!_lastRevealedCell)
             {
                 RevealCell(cell);
             }
-            else if (cell.Id == _revealedCell.Id)
+            else if (cell.Id == _lastRevealedCell.Id)
             {
-                ResolveMatch(cell);
+                OnMatch(cell);
             }
             else
             {
-                ResetCells(cell);
+                OnMismatch(cell);
             }
         }
         
@@ -96,20 +105,25 @@ namespace Game
         private void RevealCell(GridCellUI cell)
         {
             cell.SetState(CellState.FrontFace);
-
-            _cts = new CancellationTokenSource();
-            _flipCellCancellationToken = _cts.Token;
-            _revealedCell = cell;
-
-            FlipRevealedCell();
+            
+            _lastRevealedCell = cell;
+            
+            cell.SetStateAsync(CellState.BackFace, _cellFlipTime, ResetLastRevealedCell);
         }
-        
-        private void ResolveMatch(GridCellUI cell)
+
+        private void ResetLastRevealedCell()
+        {
+            _lastRevealedCell = null;
+        }
+
+        private void OnMatch(GridCellUI cell)
         {
             _matchedPairs++;
+            
             cell.SetState(CellState.Matched);
-            _revealedCell.SetState(CellState.Matched);
-            _revealedCell = null;
+            _lastRevealedCell.SetState(CellState.Matched);
+            
+            _lastRevealedCell = null;
 
             if (_matchedPairs == _pairsCount)
             {
@@ -117,70 +131,20 @@ namespace Game
             }
         }
 
-        private async void FlipRevealedCell()
+        private void OnMismatch(GridCellUI cell)
         {
-            try
-            {
-                await Task.Delay((int)(_cellFlipTime * 1000), _flipCellCancellationToken);
-                if (_cts.IsCancellationRequested)
-                    return;
-            
-                _revealedCell.SetState(CellState.BackFace);
-                _revealedCell = null;
-            }
-            catch (Exception)
-            {
-                //flip is cancelled
-            }
-            
-        }
-
-        private void ResetCells(GridCellUI cell)
-        {
-            _isEnableInput = false;
-            
             cell.SetState(CellState.FrontFace);
-            
-            _cts = new CancellationTokenSource();
-            _flipCellCancellationToken = _cts.Token;
 
-            FlipCells(cell);
-        }
+            _lastRevealedCell.SetStateAsync(CellState.BackFace, _cellFlipTime);
+            cell.SetStateAsync(CellState.BackFace, _cellFlipTime);
 
-        private async void FlipCells(GridCellUI cell)
-        {
-            try
-            {
-                await Task.Delay((int)(_cellFlipTime * 1000), _flipCellCancellationToken);
-            
-                _revealedCell.SetState(CellState.BackFace);
-                cell.SetState(CellState.BackFace);
-            
-                _revealedCell = null;
-                _isEnableInput = true;
-            }
-            catch (Exception)
-            {
-                //flip is cancelled
-            }
-            
+            _lastRevealedCell = null;
         }
         
         private void Clear()
         {
-            CancelFlip();
-            _isEnableInput = true;
             _levelGridUI.transform.RemoveAllChildren();
-            _revealedCell = null;
-        }
-
-        private void CancelFlip()
-        {
-            
-            if (_cts == null) return;
-            _cts.Cancel();
-            _cts.Dispose();
-            _cts = null;
+            _lastRevealedCell = null;
         }
         
     }
