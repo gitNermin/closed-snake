@@ -14,6 +14,10 @@ namespace Game
 
         [Tooltip("will be automatically incremented to keep even cells count")] [SerializeField]
         private int _emptyCellsCount;
+        
+        [field: SerializeField] public FailCondition FailCondition { get; private set; }
+        [field: SerializeField] public float ConditionValue { get; private set; }
+        [field: SerializeField] public int PointsPerMatch { get; private set; }
 
         public int PairsCount
         {
@@ -31,6 +35,11 @@ namespace Game
         [ContextMenu("Validate")]
         public bool ValidateLevelData()
         {
+            if (PairsCount <= 1)
+            {
+                Debug.LogError("Pairs count must be greater than 1");
+                return false;
+            }
             if (Sprites.Count < PairsCount)
             {
                 Debug.LogError($"Sprites Count {Sprites.Count} is not large enough");
@@ -39,5 +48,11 @@ namespace Game
 
             return true;
         }
+    }
+
+    public enum FailCondition
+    {
+        Time,
+        Turns
     }
 }

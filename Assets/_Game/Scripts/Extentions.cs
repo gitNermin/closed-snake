@@ -7,10 +7,9 @@ namespace Game
     {
         public static void RemoveAllChildren(this Transform transform)
         {
-            int childCount = transform.childCount;
-            for (int i = 0; i < childCount; i++)
+            for (int i = transform.childCount - 1; i >= 0; i--)
             {
-                Object.Destroy(transform.GetChild(0).gameObject);
+                GameObject.Destroy(transform.GetChild(i).gameObject);
             }
         }
         
@@ -24,6 +23,21 @@ namespace Game
 
                 transform.GetChild(i).SetSiblingIndex(j);
             }
+        }
+        
+        public static string ToClockFormat(this float totalSeconds)
+        {
+            totalSeconds = Mathf.Max(0f, totalSeconds);
+            int seconds = (int)totalSeconds;
+
+            int hours = seconds / 3600;
+            int minutes = (seconds % 3600) / 60;
+            int secs = seconds % 60;
+
+            if (hours > 0)
+                return $"{hours:D2}:{minutes:D2}:{secs:D2}";
+            else
+                return $"{minutes:D2}:{secs:D2}";
         }
     }
 }
