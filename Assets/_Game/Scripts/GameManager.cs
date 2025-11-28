@@ -105,6 +105,8 @@ namespace Game
             if (cell == _lastRevealedCell)
                 return;
 
+            SoundManager.Instance.PlaySound(Audio.Flip);
+            
             if (!_lastRevealedCell)
             {
                 RevealCell(cell);
@@ -135,6 +137,8 @@ namespace Game
 
         private void OnMatch(GridCellUI cell)
         {
+            SoundManager.Instance.PlaySound(Audio.Match);
+            
             _matchedPairs++;
             _onMatchesUpdated?.Invoke(_matchedPairs);
             
@@ -165,6 +169,9 @@ namespace Game
 
         private void OnMismatch(GridCellUI cell)
         {
+            
+            SoundManager.Instance.PlaySound(Audio.Mismatch);
+            
             _combo = 1;
             
             cell.SetState(CellState.FrontFace);
@@ -204,6 +211,7 @@ namespace Game
 
         private void FailLevel()
         {
+            SoundManager.Instance.PlaySound(Audio.GameOver);
             _onLevelLose?.Invoke();
         }
 

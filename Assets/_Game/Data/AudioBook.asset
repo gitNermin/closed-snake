@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e629ec0600244649943ed9a0c477163, type: 3}
+  m_Name: AudioBook
+  m_EditorClassIdentifier: 
+  Audios:
+  - Key: 0
+    Clips:
+    - {fileID: 8300000, guid: cdfb9c43b96e5df478940e365a17a386, type: 3}
+    - {fileID: 8300000, guid: 6e478ee058f314e41ba353d0d3d020f7, type: 3}
+    - {fileID: 8300000, guid: 9b1861da6c503e448bc9114c827f6e62, type: 3}
+    - {fileID: 8300000, guid: 4280cc1454ee7f846a38b67c89b067a2, type: 3}
+    - {fileID: 8300000, guid: bffe1d2bbf3afa245980211f8bcf8c44, type: 3}
+    - {fileID: 8300000, guid: f416de0a1ba61c040aa313b3cb9a0818, type: 3}
+    - {fileID: 8300000, guid: 198549bf5a230e44d863e6d5c7adbe98, type: 3}
+    - {fileID: 8300000, guid: c53dbb93d1eb54648b5f435c8fad8f91, type: 3}
+  - Key: 1
+    Clips:
+    - {fileID: 8300000, guid: cf25b212546d59b4c874dbb43fbfebac, type: 3}
+  - Key: 2
+    Clips:
+    - {fileID: 8300000, guid: fef5eb5edbf218846b12ab5a7173e6c4, type: 3}
+    - {fileID: 8300000, guid: 89d24d5fd7ba4454288baa5e7842b1b1, type: 3}
+    - {fileID: 8300000, guid: 9ccd37a5bce96c44aad033b1b423587e, type: 3}
+    - {fileID: 8300000, guid: 339db83a1c2e1924387aff8c552bf6f4, type: 3}
+    - {fileID: 8300000, guid: c6c1cbbc82ed89343a3c5b3edff4e7eb, type: 3}
+    - {fileID: 8300000, guid: a0360f63ef566574ca9dc2a93b426a32, type: 3}
+    - {fileID: 8300000, guid: 972acf6d4807d9f428e6a06faa11aeba, type: 3}
+    - {fileID: 8300000, guid: 05cff37cc9b81744e8da35f49f5ef686, type: 3}
+  - Key: 3
+    Clips:
+    - {fileID: 8300000, guid: bc411ed02cd93414988cd9177bf388b2, type: 3}
