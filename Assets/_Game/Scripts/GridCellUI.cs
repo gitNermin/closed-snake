@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -19,18 +20,24 @@ namespace Game
         [SerializeField] private Image _backFaceImage;
         [SerializeField] private Animator _anim;
 
-        private Guid _id;
+        private int _id;
         private UnityAction<GridCellUI> _onClick;
 
         private CancellationTokenSource _tokenSource;
         private CancellationToken _cancellationToken;
         
 
-        public Guid Id => _id;
+        public int Id => _id;
 
         private CellState _state;
 
-        public void Setup(Guid id, Sprite frontSprite, Sprite backSprite, UnityAction<GridCellUI> onClick)
+        public CellSaveData SaveData => new CellSaveData()
+        {
+            Id = _id,
+            IsMatched = _state == CellState.Matched
+        };
+
+        public void Setup(int id, Sprite frontSprite, Sprite backSprite, UnityAction<GridCellUI> onClick)
         {
             _id = id;
             _onClick = onClick;
@@ -108,6 +115,8 @@ namespace Game
             _tokenSource.Cancel();
             _tokenSource = null;
         }
+        
+        
     }
 }
 

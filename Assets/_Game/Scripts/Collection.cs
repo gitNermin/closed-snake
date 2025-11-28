@@ -6,11 +6,11 @@ namespace Game
 {
     public abstract class Collection<T> : ScriptableObject
     {
-        [SerializeField] private T[] Items;
+        [SerializeField] private List<T> Items;
         public T this[int index] => Items[index];
-        public int Count => Items.Length;
-        
-        public T GetRandom() => Items[Random.Range(0, Items.Length)];
+        public int Count => Items.Count;
+        public T GetRandom() => Items[Random.Range(0, Items.Count)];
+        public int IndexOf(T item) => Items.IndexOf(item);
         
         public List<T> GetRandomItems(int count)
         {

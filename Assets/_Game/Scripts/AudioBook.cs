@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 namespace Game
 {
     //better use serialized dictionary from odin or import it
-    [CreateAssetMenu(fileName = "AudioBook", menuName = "Game/AudioBook", order = 0)]
+    [CreateAssetMenu(fileName = "audioBook", menuName = "Game/audioBook", order = 0)]
     public class AudioBook : ScriptableObject
     {
         private Dictionary<Audio, AudioClip[] > _audios;
@@ -36,6 +36,7 @@ namespace Game
         }
     }
 
+    //todo: add more data for volume or frequency variations
     [Serializable]
     public class AudioData
     {

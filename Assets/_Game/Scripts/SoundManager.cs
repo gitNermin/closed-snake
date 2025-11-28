@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Game
 {
+    //todo: use service locator
     public class SoundManager : MonoBehaviour
     {
         [SerializeField] private AudioBook _audioBook;

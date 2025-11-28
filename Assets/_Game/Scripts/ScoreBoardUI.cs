@@ -45,6 +45,11 @@ namespace Game
         public void OnScoreUpdated(int score, int deltaValue)
         {
             _scoreText.text = score.ToString();
+            
+            if(deltaValue <= 0) 
+                return;
+            
+            //todo: use pool
             var toast = Instantiate(_scoreToast, _scoreToastParent);
             toast.text = $"+{deltaValue}";
             Destroy(toast.gameObject, 1f);

@@ -13,7 +13,6 @@ namespace Game
             }
         }
         
-        
         public static void ShuffleChildren(this Transform transform)
         {
             int childCount = transform.childCount;
